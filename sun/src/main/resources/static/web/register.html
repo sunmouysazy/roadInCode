@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8"/>
+  <title>注册页面</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+
+<!--主体-->
+<div class="container mycontent text-left">
+  <!--透明层 -->
+  <h4>新用户注册</h4>
+  <hr/>
+  <!--表单开始-->
+  <form id="reg-form" action="../login.html" method="get" class="form-horizontal" role="form">
+    <!--用户名-->
+    <div class="form-group">
+      <label for="username" class="col-md-3 control-label">用户名：</label>
+      <div class="col-md-8">
+        <input name="username" type="text" class="form-control" id="username" placeholder="请输入用户名">
+      </div>
+    </div>
+    <!--密码-->
+    <span> 密码：</span>
+    <div class="col-md-8">
+      <input name="password" type="password" class="form-control" id="pwd1" placeholder="请输入密码">
+    </div>
+    <!--确认密码-->
+    <div class="form-group">
+      <span> 确认密码：</span>
+      <div class="col-md-8">
+        <input type="password" class="form-control" id="pwd2" placeholder="请再次输入密码">
+      </div>
+    </div>
+    <!--提交按钮-->
+    <div class="form-group">
+      <label class="col-md-3 control-label"></label>
+      <div class="col-md-8">
+        <input id="btn_reg" class="btn btn-primary"
+               type="button" value="立即注册"/>
+        <span class="pull-right"><small>已经有账号？</small><a href="../login.html">登录</a></span>
+      </div>
+    </div>
+  </form>
+
+</div>
+<script type="text/javascript">
+  //点击注册按钮
+  $('#btn_reg').click(function() {
+    var url = '../user/add';
+    var pwd1 = document.getElementById('pwd1').value;
+    var pwd2 = document.getElementById('pwd2').value;
+    <!-- 对比两次输入的密码 -->
+    if (pwd1 != pwd2) {
+      alert('两次密码必须一致！');
+      return;
+    }
+    var data = $('#reg-form').serialize();
+    console.log('提交的数据：' + data);
+    $.ajax({
+      'url': url,
+      'data': data,
+      'type': 'POST',
+      'dataType': 'json',
+      'success': function(json) {
+        if (json.state == 200) {
+          // 注册成功
+          alert('注册成功！' + json.msg);
+          window.location.href="login.html";
+        } else if(json.state == 301){
+          alert('注册失败！' + json.msg);
+        }else if(json.state == 302){
+          alert('注册失败！' + json.msg);
+        }else if(json.state == 303){
+          alert('注册失败！' + json.msg);
+        }
+      },
+    });
+  });
+</script>
+</body>
+
+</html>
+
+
+
+
+

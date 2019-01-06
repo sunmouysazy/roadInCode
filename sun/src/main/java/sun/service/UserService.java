@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import sun.dao.UserDao;
 import sun.entity.User;
 import sun.service.Exception.PasswordFormatException;
+import sun.service.Exception.PasswordWoringException;
+import sun.service.Exception.UpdatePasswordException;
+import sun.service.Exception.UserNotFindException;
 import sun.service.Exception.UsernameConfictException;
 import sun.service.Exception.UsernameFormatException;
 
@@ -31,28 +34,97 @@ public class UserService {
         String password = user.getPassword();
         // 设置用户的角色为注册用户
         user.setRoleId(2);
-
         // 校验用户名
-        if (6 > username.length() || username.length() > 16) {
-            System.out.println("用户名验证失败");
-            throw new UsernameFormatException("用户名格式不正确，请重新输入！");
-        }
-
-        // 检查用户名是否存在
-        Integer id = userDao.getIdByUsername(username);
+        checkUsername(username);
+        // 检查用户是否存在
+        Integer id = userDao.getUserIdByUsername(username);
         if (id != null) {
             System.out.println("用户名已被占用！");
-            throw new UsernameConfictException("用户名已被占用，请重新输入！");
+            throw new UsernameConfictException("用户名" + username + "已被占用，请重新输入！");
         }
-
         // 校验密码
+        checkPassword(password);
+        // 调用持久层方法
+        userDao.save(user);
+    }
+
+    // 用户登录校验方法
+    public User Userlogin(User user) {
+        System.out.println(user);
+        // 获取用户输入的用户名及密码
+        String username = user.getUsername();
+        String inputPwd = user.getPassword();
+        // 根据用户名查询用户信息
+        User list = getUserByUsername(username);
+        // 获取id
+        // 获取查询出的用户密码
+        String UserPwd = list.getPassword();
+        // 对比密码
+        if (inputPwd.equals(UserPwd)) {
+            // 密码匹配
+            System.out.println("登录成功！");
+        } else {
+            // 密码不匹配
+            System.out.println("密码:" + inputPwd + "不正确！");
+            throw new PasswordWoringException("密码不正确，请重新输入！");
+        }
+        return list;
+    }
+
+    // 用户修改密码的方法
+    public void updatePwd(Integer id, String oldPwd, String newPwd) {
+        // 校验新旧密码格式
+        checkPassword(oldPwd);
+        checkPassword(newPwd);
+        // 根据id查询用户信息
+        User user = userDao.getUserByUserId(id);
+        if (user == null) {
+            throw new UserNotFindException("尝试访问的用户数据不存在！可能已经被删除！");
+        }
+        // 检验原密码是否正确
+        // 获取用户密码
+        String userPwd = user.getPassword();
+        // 用户密码与输入的原密码对比
+        if (oldPwd.equals(userPwd)) {
+            // 密码匹配
+            // 调用持久层方法更新密码
+            Integer row = userDao.updatePassword(id,newPwd);
+            if(row != 1){
+                throw new UpdatePasswordException("修改密码时发生未知异常，请重试！");
+            }
+        } else {
+            // 密码不匹配
+            throw new PasswordWoringException("原密码输入错误，请重新输入！");
+        }
+    }
+
+    // 查询用户信息的方法
+    private User getUserByUsername(String username) {
+        User list = userDao.getUserByUsername(username);
+        if (list == null) {
+            System.out.println("用户不存在！");
+            throw new UserNotFindException("用户名" + username + "不存在，请重新输入！");
+        }
+        // 返回用户信息
+        return list;
+    }
+
+    // 校验用户名的方法
+    private void checkUsername(String username) {
+        if (6 > username.length() || username.length() > 16) {
+            System.out.println("用户名验证失败");
+            throw new UsernameFormatException("用户名" + username + "格式不正确，请输入6-16位用户名！");
+        }
+    }
+
+    // 校验密码格式的方法
+    private void checkPassword(String password) {
         String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$";
         boolean check = password.matches(regex);
         if (!check) {
             System.out.println("密码验证失败！");
-            throw new PasswordFormatException("密码格式不正确，请重新输入！");
+            throw new PasswordFormatException("密码格式不正确，请重新输入6-16位由字母和数字构成的密码！");
         }
-        userDao.save(user);
     }
 
     // 查询全部用户方法
