@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import sun.entity.ResponseResult;
+import sun.service.Exception.NoAccessInfoException;
 import sun.service.Exception.PasswordFormatException;
 import sun.service.Exception.PasswordWoringException;
 import sun.service.Exception.ServiceException;
@@ -43,6 +44,9 @@ public class BaseController {
         }else if (e instanceof UpdatePasswordException) {
             // 305-更新密码未知异常
             return new ResponseResult(305, e.getMessage());
+        }else if (e instanceof NoAccessInfoException) {
+            // 306-用户访问管理页面异常
+            return new ResponseResult(306, e.getMessage());
         }
         return null;
     }

@@ -51,47 +51,52 @@
   $(document).ready(function() {
     userList();
   });
+
   // 首次加载
-  function userList(){
+  function userList() {
     var url = '../user/pageFind';
     var data = $('#form-page').serialize();
     $.ajax({
       'url': url,
-      'data':data,
+      'data': data,
       'type': 'GET',
       'dataType': 'json',
       'success': function(json) {
-        // 清除原有列表
-        $('#user-list').empty();
-        // 从返回结果中获取数据
-        var list = json.data;
-        // 遍历收货地址数据
-        console.log('用户列表数据：');
-        for (var i = 0; i < list.length; i++) {
-          console.log('id=' + list[i].id + ', username=' + list[i].username + ', password=' + list[i].password + ', role_id=' + list[i].roleId);
-          // 定义HTML代码的模版
-          var html = '<tr>'
-              + '<td>#{user_id}</td>'
-              + '<td>#{user_username}</td>'
-              + '<td>#{user_password}</td>'
-              + '<td>#{role_id}</td>'
-              + '<td><a  href="#">修改</a></td>'
-              + '<td><a  href="#">删除</a></td>'
-              + '</tr>';
+        if (json.state != 200) {
+          window.location.href = 'index.html';
+          alert('' + json.msg);
+        } else {
+          // 清除原有列表
+          $('#user-list').empty();
+          // 从返回结果中获取数据
+          var list = json.data;
+          // 遍历收货地址数据
+          console.log('用户列表数据：');
+          for (var i = 0; i < list.length; i++) {
+            console.log('id=' + list[i].id + ', username=' + list[i].username + ', password=' + list[i].password + ', role_id=' + list[i].roleId);
+            // 定义HTML代码的模版
+            var html = '<tr>'
+                + '<td>#{user_id}</td>'
+                + '<td>#{user_username}</td>'
+                + '<td>#{user_password}</td>'
+                + '<td>#{role_id}</td>'
+                + '<td><a  href="#">修改</a></td>'
+                + '<td><a  href="#">删除</a></td>'
+                + '</tr>';
 
-          // 替换模版中的占位符
-          html = html.replace('#{user_id}', list[i].id);
-          html = html.replace('#{user_username}', list[i].username);
-          html = html.replace('#{user_password}', list[i].password);
-          html = html.replace('#{role_id}', list[i].roleId);
+            // 替换模版中的占位符
+            html = html.replace('#{user_id}', list[i].id);
+            html = html.replace('#{user_username}', list[i].username);
+            html = html.replace('#{user_password}', list[i].password);
+            html = html.replace('#{role_id}', list[i].roleId);
 
-          // 将HTML代码添加到表格中
-          $('#user-list').append(html);
+            // 将HTML代码添加到表格中
+            $('#user-list').append(html);
+          }
         }
       },
     });
   }
-
 
 
 </script>

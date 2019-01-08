@@ -1,7 +1,9 @@
 package sun.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import sun.dao.UserDao;
 import sun.entity.ResponseResult;
 import sun.entity.User;
 import sun.service.UserService;
+import sun.service.Exception.NoAccessInfoException;
 import sun.service.Exception.UserNotFindException;
 
 /**
@@ -68,8 +71,13 @@ public class UserController extends BaseController {
 
     // 分页查看用户的方法
     @RequestMapping("/pageFind")
-        public ResponseResult pageFind(@RequestParam(value = "page",defaultValue = "1",required = false) Integer page){
-            System.out.println("Controller的page的值"+page);
+        public ResponseResult pageFind(@RequestParam(value = "page",defaultValue = "1",required = false) Integer page, HttpSession session, HttpServletResponse response) throws IOException {
+        // 通过session验证获取id
+        Integer id = getIdfromSession(session);
+        if (id != 1){
+            throw new NoAccessInfoException("您没有管理员权限，无法访问！");
+        }
+        System.out.println("Controller的page的值"+page);
         List<User> list =  userService.pageFind(page);
         System.out.println("从service出来list的值"+page);
         ResponseResult result = new ResponseResult();
