@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import sun.entity.ResponseResult;
+import sun.service.Exception.DeleteManagerException;
 import sun.service.Exception.NoAccessInfoException;
+import sun.service.Exception.PageIndexOfException;
 import sun.service.Exception.PasswordFormatException;
 import sun.service.Exception.PasswordWoringException;
 import sun.service.Exception.ServiceException;
@@ -47,6 +49,12 @@ public class BaseController {
         }else if (e instanceof NoAccessInfoException) {
             // 306-用户访问管理页面异常
             return new ResponseResult(306, e.getMessage());
+        }else if (e instanceof DeleteManagerException) {
+            // 307-删除管理异常
+            return new ResponseResult(307, e.getMessage());
+        }else if (e instanceof PageIndexOfException) {
+            // 308-页面超限异常
+            return new ResponseResult(308, e.getMessage());
         }
         return null;
     }

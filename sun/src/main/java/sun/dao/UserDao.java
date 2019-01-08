@@ -37,9 +37,10 @@ public interface UserDao extends JpaRepository<User, Integer> {
     Integer updatePassword(@Param("id") Integer id, @Param("password") String password);
 
 
-//     修改个人资料(根据id修改)
-//    @Transactional
-//    @Modifying
-//    @Query("update User u set ")
-
+    // 删除用户个人资料(根据id删除)
+    @Transactional
+    @Modifying
+    @Query("delete from User where id=?1")
+    Integer deleteUserById(Integer id);
+    
 }

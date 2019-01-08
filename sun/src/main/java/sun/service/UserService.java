@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import sun.dao.UserDao;
 import sun.entity.User;
+import sun.service.Exception.DeleteManagerException;
+import sun.service.Exception.PageIndexOfException;
 import sun.service.Exception.PasswordFormatException;
 import sun.service.Exception.PasswordWoringException;
 import sun.service.Exception.UpdatePasswordException;
@@ -105,13 +107,13 @@ public class UserService {
     // 分页查询的方法
     public List<User> pageFind(Integer page) {
         // 默认跳过页数page为1
-        if (null == page){
+        if (null == page) {
             page = 1;
         }
         // 创建list集合作为读取分页查询数据的容器
         List<User> list = new ArrayList<User>(5);
         // 创建pageable对象 设置每页数据5条
-        Pageable pageable = PageRequest.of(page-1, 5);
+        Pageable pageable = PageRequest.of(page - 1, 5);
         // 分页查询所有用户数据
         Page<User> datas = userDao.findAll(pageable);
         System.out.println("总条数：" + datas.getTotalElements());
@@ -119,9 +121,22 @@ public class UserService {
         // 循环将分页数据装入list集合
         for (User u : datas) {
             list.add(u);
-            System.out.println(list);
+        }
+        if(page > datas.getTotalPages()){
+            throw new PageIndexOfException("页面超限！");
         }
         return list;
+    }
+
+    // 删除用户的方法(根据用户id删除)
+    public void deleteUserById(Integer id) {
+        // 调用持久层方法
+        if (id != 1) {
+            userDao.deleteUserById(id);
+            System.out.println("用户"+id+"已被删除！");
+            return;
+        }
+        throw new DeleteManagerException("权限不足,无法删除管理员！");
     }
 
     // 查询用户信息的方法
