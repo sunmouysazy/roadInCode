@@ -22,7 +22,7 @@
     <form id="login-form" action="login.html" method="get" class="form-horizontal" role="form">
       <!--用户名-->
       <div class="form-group">
-        <label for="username" class="col-md-3 control-label">用户名：</label>
+        <label for="username" class="col-md-3 control-label"><span>用户名：</span></label>
         <div class="col-md-8">
           <input name="username" type="text" class="form-control" id="username" placeholder="请输入用户名">
         </div>
@@ -50,7 +50,7 @@
         <div class="col-md-8">
           <input id="btn-login" class="btn btn-primary"
                  type="button" value="登录"/>
-          <span class="pull-right"><small>还没有账号？</small><a href="WebInterceptor/register.html">注册</a></span>
+          <span class="pull-right"><small>还没有账号？</small><a href=" register.html">注册</a></span>
         </div>
       </div>
     </form>
@@ -72,6 +72,7 @@
         if (json.state == 200) {
           // 登录成功
           alert('登录成功！' + json.msg);
+          window.location.href="index.html";
         } else {
           alert('登录失败！' + json.msg);
         }

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		<meta charset="utf-8" />
+		<title>学子商城</title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+	</head>
+
+	<body>
+
+
+				<div class="panel-body">
+					<!--地址显示-->
+					<table>
+						<caption>用户列表</caption>
+						<thead>
+							<tr>
+								<th>id</th>
+								<th>用户名</th>
+								<th>密码</th>
+								<th colspan="3">操作</th>
+							</tr>
+						</thead>
+
+					<tbody id="user-list">
+							<tr>
+								<td>1</td>
+								<td>测试账号</td>
+								<td>测试密码</td>
+								<td><a  href="#">修改</a></td>
+								<td><a  href="#">删除</a></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+
+		<script type="text/javascript">
+		function showAddressList() {
+			var url = "../user/pageFind";
+			$.ajax({
+				"url": url,
+				"type": "POST",
+				"dataType": "json",
+				"success": function(json) {
+					// 清除原有列表
+					$("#user-list").empty();
+					// 从返回结果中获取数据
+					var list = json.data;
+					// 遍历收货地址数据
+					console.log("用户列表数据：");
+					for (var i = 0; i < list.length; i++) {
+						console.log("name=" + list[i].recvName + ", phone=" + list[i].recvPhone + ", address=" + list[i].recvDistrict + ", " + list[i].recvAddress);
+						// 定义HTML代码的模版
+						var html = '<tr>'
+							+ '<td>#{recv_tag}</td>'
+							+ '<td>#{recv_name}</td>'
+							+ '<td>#{recv_address}</td>'
+							+ '<td>#{recv_phone}</td>'
+							+ '<td><a class="btn btn-xs btn-info"><span class="fa fa-edit"></span>修改</a></td>'
+							+ '<td><a class="btn btn-xs add-del btn-info" href="javascript:deleteById(#{id})" onclick="return confirm(\'删除操作将不可恢复！您确定删除吗？\')"><span class="fa fa-trash-o"></span>删除</a></td>'
+							+ '<td><a class="btn btn-xs add-def btn-default" href="javascript:setDefault(#{id})">设为默认</a></td>'
+							+ '</tr>';
+							
+						// 替换模版中的占位符
+						html = html.replace(/#{id}/g, list[i].id);
+						html = html.replace("#{recv_tag}", list[i].recvTag);
+						html = html.replace("#{recv_name}", list[i].recvName);
+						html = html.replace("#{recv_address}", list[i].recvDistrict + ", " + list[i].recvAddress);
+						html = html.replace("#{recv_phone}", list[i].recvPhone);
+						
+						// 将HTML代码添加到表格中
+						$("#address-list").append(html);
+					}
+					
+					// 根据类选择器找到.add_def，即“设为默认”按钮的样式
+					// 会找到多个结果，选出其中的第0个（第1个），隐藏
+					$(".add-def").eq(0).hide();
+				}
+			});
+		}
+		
+		function setDefault(id) {
+			console.log("将id=" + id + "设置为默认收货地址……");
+			
+			var url = "../address/set_default.do"
+			var data = "id=" + id;
+			$.ajax({
+				"url": url,
+				"data": data,
+				"type": "GET",
+				"dataType": "json",
+				"success": function(json) {
+					if (json.state == 200) {
+						// alert("设置成功！")
+						// location.href = "address.html";
+						showAddressList();
+					} else {
+						alert("设置失败！" + json.message);
+					}
+				},
+				"error": function(xhr) {
+					console.log("响应码：" + xhr.status);
+					alert("您的登录信息已过期，请重新登录！");
+					location.href = "login.html";
+				}
+			});
+		}
+
+		function deleteById(id) {
+			console.log("删除id=" + id + "的收货地址……");
+			
+			var url = "../address/delete.do"
+			var data = "id=" + id;
+			$.ajax({
+				"url": url,
+				"data": data,
+				"type": "GET",
+				"dataType": "json",
+				"success": function(json) {
+					if (json.state == 200) {
+						showAddressList();
+					} else {
+						alert("删除失败！" + json.message);
+					}
+				},
+				"error": function(xhr) {
+					console.log("响应码：" + xhr.status);
+					alert("您的登录信息已过期，请重新登录！");
+					location.href = "login.html";
+				}
+			});
+		}
+		
+		$(document).ready(function() {
+			showAddressList();
+		});
+		</script>
+	</body>
+
+</html>

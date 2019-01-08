@@ -5,10 +5,13 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import sun.dao.UserDao;
 import sun.entity.ResponseResult;
 import sun.entity.User;
 import sun.service.UserService;
@@ -26,16 +29,18 @@ public class UserController extends BaseController {
     // 自动装配，导入业务层
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserDao dao;
 
     // 添加用户的方法
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public ResponseResult insert(User user) {
         // 调用业务层方法
         userService.add(user);
         return new ResponseResult();
     }
 
-    // 用户登录的方法
+    // 用户登录的方法d
     @RequestMapping("/login")
     public ResponseResult login(User user, HttpSession session) {
         // 调用业务层方法
@@ -46,8 +51,7 @@ public class UserController extends BaseController {
         session.setAttribute("id", id);
         System.out.println("封装id："+id);
         // 创建返回值对象
-        ResponseResult result = new ResponseResult();
-        return result;
+        return new ResponseResult();
     }
 
     // 修改用户密码的方法
@@ -60,9 +64,18 @@ public class UserController extends BaseController {
         // 调用业务层方法
         userService.updatePwd(id,oldPwd,newPwd);
         // 创建返回值对象
+        return new ResponseResult();
+    }
+
+    @RequestMapping("/pageFind")
+        public ResponseResult pageFind(){
+        Page<User> page =  userService.pageFind();
         ResponseResult result = new ResponseResult();
+        result.setData(page);
         return result;
     }
+
+
 
     // 查询所有用户
     @RequestMapping("/find")

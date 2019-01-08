@@ -3,6 +3,9 @@ package sun.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import sun.dao.UserDao;
@@ -98,6 +101,20 @@ public class UserService {
         }
     }
 
+    // 分页查询的方法
+        public Page<User> pageFind(){
+            Pageable pageable =PageRequest.of(0, 5);
+            Page<User> datas = userDao.findAll(pageable);
+            System.out.println("总条数："+datas.getTotalElements());
+            System.out.println("总页数："+datas.getTotalPages());
+            for(User u : datas) {
+                System.out.println(u);
+            }
+            return datas;
+        }
+
+
+
     // 查询用户信息的方法
     private User getUserByUsername(String username) {
         User list = userDao.getUserByUsername(username);
@@ -126,6 +143,8 @@ public class UserService {
             throw new PasswordFormatException("密码格式不正确，请重新输入6-16位由字母和数字构成的密码！");
         }
     }
+
+
 
     // 查询全部用户方法
     public List<User> findAll() {
