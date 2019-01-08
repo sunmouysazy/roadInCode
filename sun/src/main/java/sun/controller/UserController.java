@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,11 +66,15 @@ public class UserController extends BaseController {
         return new ResponseResult();
     }
 
+    // 分页查看用户的方法
     @RequestMapping("/pageFind")
-        public ResponseResult pageFind(){
-        Page<User> page =  userService.pageFind();
+        public ResponseResult pageFind(@RequestParam(value = "page",defaultValue = "1",required = false) Integer page){
+            System.out.println("Controller的page的值"+page);
+        List<User> list =  userService.pageFind(page);
+        System.out.println("从service出来list的值"+page);
         ResponseResult result = new ResponseResult();
-        result.setData(page);
+        result.setData(list);
+        result.setState(200);
         return result;
     }
 

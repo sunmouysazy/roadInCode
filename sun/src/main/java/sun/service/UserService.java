@@ -1,5 +1,6 @@
 package sun.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +92,8 @@ public class UserService {
         if (oldPwd.equals(userPwd)) {
             // 密码匹配
             // 调用持久层方法更新密码
-            Integer row = userDao.updatePassword(id,newPwd);
-            if(row != 1){
+            Integer row = userDao.updatePassword(id, newPwd);
+            if (row != 1) {
                 throw new UpdatePasswordException("修改密码时发生未知异常，请重试！");
             }
         } else {
@@ -102,18 +103,26 @@ public class UserService {
     }
 
     // 分页查询的方法
-        public Page<User> pageFind(){
-            Pageable pageable =PageRequest.of(0, 5);
-            Page<User> datas = userDao.findAll(pageable);
-            System.out.println("总条数："+datas.getTotalElements());
-            System.out.println("总页数："+datas.getTotalPages());
-            for(User u : datas) {
-                System.out.println(u);
-            }
-            return datas;
+    public List<User> pageFind(Integer page) {
+        // 默认跳过页数page为1
+        if (null == page){
+            page = 1;
         }
-
-
+        // 创建list集合作为读取分页查询数据的容器
+        List<User> list = new ArrayList<User>(5);
+        // 创建pageable对象 设置每页数据5条
+        Pageable pageable = PageRequest.of(page-1, 5);
+        // 分页查询所有用户数据
+        Page<User> datas = userDao.findAll(pageable);
+        System.out.println("总条数：" + datas.getTotalElements());
+        System.out.println("总页数：" + datas.getTotalPages());
+        // 循环将分页数据装入list集合
+        for (User u : datas) {
+            list.add(u);
+            System.out.println(list);
+        }
+        return list;
+    }
 
     // 查询用户信息的方法
     private User getUserByUsername(String username) {
@@ -143,8 +152,6 @@ public class UserService {
             throw new PasswordFormatException("密码格式不正确，请重新输入6-16位由字母和数字构成的密码！");
         }
     }
-
-
 
     // 查询全部用户方法
     public List<User> findAll() {
