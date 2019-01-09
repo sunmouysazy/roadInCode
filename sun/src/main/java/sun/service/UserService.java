@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 import sun.dao.UserDao;
 import sun.entity.User;
 import sun.service.Exception.DeleteManagerException;
+import sun.service.Exception.NullOfIdForParamException;
 import sun.service.Exception.PageIndexOfException;
 import sun.service.Exception.PasswordFormatException;
 import sun.service.Exception.PasswordWoringException;
+import sun.service.Exception.RoleIdFormatException;
 import sun.service.Exception.UpdatePasswordException;
 import sun.service.Exception.UserNotFindException;
 import sun.service.Exception.UsernameConfictException;
@@ -122,7 +124,7 @@ public class UserService {
         for (User u : datas) {
             list.add(u);
         }
-        if(page > datas.getTotalPages()){
+        if (page > datas.getTotalPages()) {
             throw new PageIndexOfException("页面超限！");
         }
         return list;
@@ -133,18 +135,53 @@ public class UserService {
         // 调用持久层方法
         if (id != 1) {
             userDao.deleteUserById(id);
-            System.out.println("用户"+id+"已被删除！");
+            System.out.println("用户" + id + "已被删除！");
             return;
         }
         throw new DeleteManagerException("权限不足,无法删除管理员！");
     }
 
-    // 查询用户信息的方法
-    private User getUserByUsername(String username) {
+    // 修改用户数据的方法(根据id修改)
+    public void updateUserById(User user) {
+        if (null == user.getId()) {
+            // 未上传id 抛出异常
+            throw new NullOfIdForParamException("修改用户数据异常！");
+        }
+        if (user.getUsername() != null) {
+            checkUsername(user.getUsername());
+        }
+        if (user.getPassword() != null) {
+            checkPassword(user.getPassword());
+        }
+        Integer roleId = user.getRoleId();
+        // 2 管理员 3 用户
+        if (roleId != null) {
+            if (roleId != 2 && roleId != 3) {
+                throw new RoleIdFormatException("请正确设置角色id！");
+            }
+        }
+        // 调用持久层
+        userDao.updateUserById(user);
+        System.out.println("修改用户数据成功!");
+    }
+
+    // 查询用户信息的方法(根据username查询)
+    public User getUserByUsername(String username) {
         User list = userDao.getUserByUsername(username);
         if (list == null) {
             System.out.println("用户不存在！");
             throw new UserNotFindException("用户名" + username + "不存在，请重新输入！");
+        }
+        // 返回用户信息
+        return list;
+    }
+
+    // 查询用户信息的方法(根据id查询)
+    public User getUserById(Integer id) {
+        User list = userDao.getUserByUserId(id);
+        if (list == null) {
+            System.out.println("用户不存在！");
+            throw new UserNotFindException("用户:" + id + "不存在，请重新输入！");
         }
         // 返回用户信息
         return list;

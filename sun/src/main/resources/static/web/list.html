@@ -12,7 +12,7 @@
 <body>
 
 
-<table id="list-table">
+<table id="list-table" border="1px" bordercolor="red" cellspacing="5px" cellpadding="20px">
   <caption>用户列表</caption>
   <thead>
   <tr>
@@ -77,8 +77,8 @@
                 + '<td>' + list[i].username + '</td>'
                 + '<td>' + list[i].password + '</td>'
                 + '<td>' + list[i].roleId + '</td>'
-                + '<td><a  href="#">修改</a></td>'
-                + '<td><a  href="javascript:;" onclick="deleteById(' + list[i].id + ')">删除</a></td>'
+                + '<td><a  href="http://localhost:8080/web/userdata.html?id=' + list[i].id + '">修改</a></td>'
+                + '<td><a  href="javascript:deleteById(' + list[i].id + ')">删除</a></td>'
                 + '</tr>';
 
             // 将HTML代码添加到表格中
@@ -99,6 +99,7 @@
       'dataType': 'json',
       'success': function(json) {
         if (json.state == 200) {
+          alert('删除成功！');
           userList();
         } else {
           alert('删除失败！' + json.msg);

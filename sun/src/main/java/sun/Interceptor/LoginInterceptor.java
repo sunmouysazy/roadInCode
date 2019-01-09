@@ -26,12 +26,11 @@ public class LoginInterceptor implements HandlerInterceptor {
             // 存在：用户已登录，则放行
             System.out.println("用户已登录,拦截器放行！");
             return true;
-        } else {
-            // 不存在：用户未登录，重定向，且拦截
-            System.out.println("用户未登录，拦截器拦截！");
-            response.sendRedirect("login.html");
-            return false;
         }
+        // 不存在：用户未登录，重定向，且拦截
+        System.out.println("用户未登录，拦截器拦截！");
+        response.sendRedirect("localhost:8080/web/login.html");
+        return false;
     }
 
     @Override

@@ -51,7 +51,7 @@ public class UserController extends BaseController {
         return new ResponseResult();
     }
 
-    // 修改用户密码的方法
+    // 用户修改密码的方法
     @RequestMapping("/update/password")
     public ResponseResult updatePwd(@RequestParam("old_password") String oldPwd, @RequestParam("new_password") String newPwd, HttpSession session) {
         // 通过session验证获取id
@@ -61,6 +61,14 @@ public class UserController extends BaseController {
         // 调用业务层方法
         userService.updatePwd(id, oldPwd, newPwd);
         // 创建返回值对象
+        return new ResponseResult();
+    }
+
+    // 修改用户数据的方法
+    @RequestMapping("/update/user")
+    public ResponseResult updateUser(User user) {
+        // 调用业务层方法
+        userService.updateUserById(user);
         return new ResponseResult();
     }
 
@@ -79,7 +87,6 @@ public class UserController extends BaseController {
         // 创建并返回对象
         ResponseResult result = new ResponseResult();
         result.setData(list);
-        result.setState(200);
         return result;
     }
 
@@ -99,6 +106,16 @@ public class UserController extends BaseController {
         return new ResponseResult();
     }
 
+    // 查询单个用户方法
+    @RequestMapping("/get")
+    public ResponseResult getUserById(Integer id) {
+        System.out.println("来了来了！！！");
+        User user = userService.getUserById(id);
+        ResponseResult result = new ResponseResult();
+        result.setData(user);
+        return result;
+    }
+
     // 查询所有用户
     @RequestMapping("/find")
     public List<User> find() {
@@ -109,4 +126,5 @@ public class UserController extends BaseController {
         }
         return list;
     }
+
 }

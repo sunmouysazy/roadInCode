@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import sun.entity.ResponseResult;
 import sun.service.Exception.DeleteManagerException;
 import sun.service.Exception.NoAccessInfoException;
+import sun.service.Exception.NullOfIdForParamException;
 import sun.service.Exception.PageIndexOfException;
 import sun.service.Exception.PasswordFormatException;
 import sun.service.Exception.PasswordWoringException;
+import sun.service.Exception.RoleIdFormatException;
 import sun.service.Exception.ServiceException;
 import sun.service.Exception.UpdatePasswordException;
 import sun.service.Exception.UserNotFindException;
@@ -55,6 +57,12 @@ public class BaseController {
         }else if (e instanceof PageIndexOfException) {
             // 308-页面超限异常
             return new ResponseResult(308, e.getMessage());
+        }else if (e instanceof NullOfIdForParamException) {
+            // 309-修改用户数据未上传id异常
+            return new ResponseResult(309, e.getMessage());
+        }else if (e instanceof RoleIdFormatException) {
+            // 310-角色id定义异常
+            return new ResponseResult(310, e.getMessage());
         }
         return null;
     }
