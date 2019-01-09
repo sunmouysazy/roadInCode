@@ -13,8 +13,8 @@ import javax.persistence.Table;
  * @author Administrator
  */
 @Entity
-@Table(name="user")
-public class User{
+@Table(name = "user")
+public class User {
     @Id// 主键
     @GeneratedValue(strategy = GenerationType.IDENTITY)// 自增
     // ID

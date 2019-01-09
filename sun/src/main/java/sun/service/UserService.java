@@ -187,6 +187,20 @@ public class UserService {
         return list;
     }
 
+    // 查询用户信息的方法(根据username模糊查询)
+    public List<User> findByUsernameLike(String username) {
+        if (null == username || "".equals(username)) {
+            System.out.println("不能输入空字符");
+            throw new UserNotFindException("不能输入空字符");
+        }
+        List<User> list = userDao.findByUsernameLike(username);
+        if (null == list || "".equals(list)) {
+            System.out.println("查无此人！");
+            throw new UserNotFindException("未查询到与之相匹配的用户，请重新输入！");
+        }
+        return list;
+    }
+
     // 校验用户名的方法
     private void checkUsername(String username) {
         if (6 > username.length() || username.length() > 16) {

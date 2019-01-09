@@ -109,10 +109,19 @@ public class UserController extends BaseController {
     // 查询单个用户方法
     @RequestMapping("/get")
     public ResponseResult getUserById(Integer id) {
-        System.out.println("来了来了！！！");
         User user = userService.getUserById(id);
         ResponseResult result = new ResponseResult();
         result.setData(user);
+        return result;
+    }
+
+    // 查询用户信息(根据username模糊查询)
+    @RequestMapping("/find/like")
+    public ResponseResult findLike(String username) {
+        List<User> list = userService.findByUsernameLike(username);
+        System.out.println("控制层" + list);
+        ResponseResult result = new ResponseResult();
+        result.setData(list);
         return result;
     }
 

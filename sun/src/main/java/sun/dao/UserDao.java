@@ -1,5 +1,7 @@
 package sun.dao;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,16 +21,20 @@ import sun.entity.User;
 @Repository
 public interface UserDao extends JpaRepository<User, Integer> {
     // 查询用户信息(根据username查询)
-    @Query("select u from User u where username=?1")
+    @Query("select u from User u where u.username=?1")
     User getUserByUsername(String username);
 
     // 查询用户信息(根据id查询)
-    @Query("select u from User u  where id=?1")
+    @Query("select u from User u  where u.id=?1")
     User getUserByUserId(Integer id);
 
     // 查询用户id(根据username查询)
     @Query("select id from User  where username=?1")
     Integer getUserIdByUsername(String username);
+
+    // 查询用户信息(根据username模糊查询)
+    @Query("select u from User u where u.username like  CONCAT('%',:username,'%')")
+    List<User> findByUsernameLike(@Param("username") String username);
 
     // 修改密码(根据id修改)
     @Transactional

@@ -34,8 +34,10 @@
   </tr>
   </tbody>
 </table>
-<input id="page" name="page" type='text' onkeyup="this.value=this.value.replace(/[^0-9-]+/,'');"/>
-<a href="javascript:userList($('#page').val());"><input id="btn-page" type="button" value="跳转"></a>
+<input id="page" name="page" type='text' placeholder="根据页数进行查询" onkeyup="this.value=this.value.replace(/[^0-9-]+/,'');"/>
+<a href="javascript:userList($('#page').val());"><input type="button" value="跳转"></a>
+<input id="find-like" name="find-like" type="text" placeholder="根据用户名进行查询">
+<a href="javascript:findLike($('#find-like').val());"><input id="btn-select" type="button" value="查询"></a>
 </div>
 </div>
 
@@ -113,6 +115,48 @@
     });
   }
 
+  function findLike(username) {
+    var url = '../user/find/like';
+    var data = {'username': username};
+    $.ajax({
+      'url': url,
+      'data': data,
+      'type': 'GET',
+      'dataType': 'json',
+      'success': function(json) {
+        if (json.state == 200) {
+          alert('查询成功！');
+          // 清除原有列表
+          $('#user-list').empty();
+          // 从返回结果中获取数据
+          var list = json.data;
+          // 遍历收货地址数据
+          console.log('用户列表数据：' + list);
+          for (var i = 0; i < list.length; i++) {
+            console.log('id=' + list[i].id + ', username=' + list[i].username + ', password=' + list[i].password + ', role_id=' + list[i].roleId);
+            // 定义HTML代码的模版
+            var html = '<tr>'
+                + '<td>' + list[i].id + '</td>'
+                + '<td>' + list[i].username + '</td>'
+                + '<td>' + list[i].password + '</td>'
+                + '<td>' + list[i].roleId + '</td>'
+                + '<td><a  href="http://localhost:8080/web/userdata.html?id=' + list[i].id + '">修改</a></td>'
+                + '<td><a  href="javascript:deleteById(' + list[i].id + ')">删除</a></td>'
+                + '</tr>';
+            // 将HTML代码添加到表格中
+            $('#user-list').append(html);
+          }
+        } else {
+          alert('查询失败！' + json.msg);
+        }
+      },
+      'error': function(xhr) {
+        console.log('响应码：' + xhr.state);
+        alert('您的登录信息已过期，请重新登录！');
+        location.href = 'login.html';
+      },
+    });
+  }
 </script>
 </body>
 
