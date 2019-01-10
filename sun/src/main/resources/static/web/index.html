@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset=utf-8 />
+  <meta charset=utf-8/>
   <title>主页</title>
 
   <script class="jsbin" src="../js/jquery-1.7.2.min.js"></script>
@@ -13,26 +13,42 @@
   <![endif]-->
   <style>
     article, aside, figure, footer, header, hgroup,
-    menu, nav, section { display: block; }
-    .west{
-      width:200px;
-      padding:10px;
+    menu, nav, section {
+      display: block;
     }
-    .north{
-      height:30px;
+
+    .west {
+      width: 200px;
+      padding: 10px;
+    }
+
+    .north {
+      height: 30px;
     }
   </style>
+  <script language=Javascript>
+    function time() {
+      //获得显示时间的div
+      t_div = document.getElementById('showtime');
+      var now = new Date();
+      //替换div内容
+      t_div.innerHTML = now.getFullYear() + '年 ' + (now.getMonth() + 1) + '月 ' + now.getDate() + '日 ' + now.getHours() + '时 ' + now.getMinutes() + '分 ';
+      //等待一秒钟后调用time方法，由于settimeout在time方法内，所以可以无限调用
+      setTimeout(time, 1000);
+    }
+  </script>
 
 </head>
-<body class="easyui-layout">
+<body class="easyui-layout" onload="time()">
 <script src="/demos/googlegg.js"></script>
 
 <div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
-	background: url(images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
+	background:  #7f99be repeat-x center 50%;
 	line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
   <span style="padding-left:10px; font-size: 16px; ">
-<img src="../images/blocks.gif" width="20" height="20" align="absmiddle" /> 实时报表系统
+<img src="../images/blocks.gif" width="20" height="20" align="absmiddle"/><span id="showtime"></span>
 </span>
+
 </div>
 <div region="center" title="">
   <div class="easyui-tabs" fit="true" border="false" id="tabs">
@@ -49,9 +65,5 @@
   <div name="All">关闭所有</div>
 </div>
 
-<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
-  <p>适用浏览器：IE8、360、FireFox、Chrome、Safari、Opera、傲游、搜狗、世界之窗.</p>
-  <p>来源：<a href="http://www.lanrenzhijia.com/" target="_blank">懒人素材</a></p>
-</div>
 </body>
 </html>

@@ -45,22 +45,22 @@ public class BaseController {
         } else if (e instanceof PasswordWoringException) {
             // 304-密码输入错误异常
             return new ResponseResult(304, e.getMessage());
-        }else if (e instanceof UpdatePasswordException) {
+        } else if (e instanceof UpdatePasswordException) {
             // 305-更新密码未知异常
             return new ResponseResult(305, e.getMessage());
-        }else if (e instanceof NoAccessInfoException) {
+        } else if (e instanceof NoAccessInfoException) {
             // 306-用户访问管理页面异常
             return new ResponseResult(306, e.getMessage());
-        }else if (e instanceof DeleteManagerException) {
+        } else if (e instanceof DeleteManagerException) {
             // 307-删除管理异常
             return new ResponseResult(307, e.getMessage());
-        }else if (e instanceof PageIndexOfException) {
+        } else if (e instanceof PageIndexOfException) {
             // 308-页面超限异常
             return new ResponseResult(308, e.getMessage());
-        }else if (e instanceof NullOfIdForParamException) {
+        } else if (e instanceof NullOfIdForParamException) {
             // 309-修改用户数据未上传id异常
             return new ResponseResult(309, e.getMessage());
-        }else if (e instanceof RoleIdFormatException) {
+        } else if (e instanceof RoleIdFormatException) {
             // 310-角色id定义异常
             return new ResponseResult(310, e.getMessage());
         }

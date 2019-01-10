@@ -17,5 +17,5 @@ public class UserVO {
     // 密码
     private String  password;
     // 角色权限
-    private String roleName;
+    private String  roleName;
 }

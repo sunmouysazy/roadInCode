@@ -7,12 +7,12 @@ package sun.entity;
  * @author Administrator
  */
 public class ResponseResult {
-    //状态码
+    // 状态码
     private Integer state = 200;
-    //状态消息
-    private String msg = "success";
-    //数据类型
-    private Object data;
+    // 状态消息
+    private String  msg   = "success";
+    // 数据类型
+    private Object  data;
 
     public ResponseResult() {
     }

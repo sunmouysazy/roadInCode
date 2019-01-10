@@ -13,8 +13,8 @@ import org.springframework.data.annotation.Id;
  */
 public class Menu {
     // ID
-    @Id//主键
-    @GeneratedValue(strategy= GenerationType.IDENTITY)//自增
+    @Id// 主键
+    @GeneratedValue(strategy = GenerationType.IDENTITY)// 自增
     private Integer id;
     // 菜单名
     private String  name;

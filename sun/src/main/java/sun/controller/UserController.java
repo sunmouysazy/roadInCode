@@ -49,7 +49,7 @@ public class UserController extends BaseController {
         Integer roleId = u.getRoleId();
         // 将id,roleId封装到session中
         session.setAttribute("id", id);
-        session.setAttribute("roleId",roleId);
+        session.setAttribute("roleId", roleId);
         System.out.println("封装id：" + id);
         // 创建返回值对象
         return new ResponseResult();
@@ -78,10 +78,10 @@ public class UserController extends BaseController {
 
     // 分页查询所有用户(关联查询)
     @RequestMapping("find/page")
-    public ResponseResult findDouble(Integer page,HttpSession session){
+    public ResponseResult findDouble(Integer page, HttpSession session) {
         Integer id = getIdfromSession(session);
         Integer roleId = Integer.valueOf(session.getAttribute("roleId").toString());
-        if(roleId != 2 && roleId!=1){
+        if (roleId != 2 && roleId != 1) {
             throw new NoAccessInfoException("您没有管理员权限，无法访问！");
         }
         ResponseResult result = new ResponseResult();
@@ -151,7 +151,5 @@ public class UserController extends BaseController {
         }
         return list;
     }
-
-
 
 }

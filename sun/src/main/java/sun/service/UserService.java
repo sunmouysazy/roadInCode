@@ -222,13 +222,13 @@ public class UserService {
 
     // 查询全部用户方法（关联查询）
     public List<UserVO> findAllByDouble(Integer page) {
-        if (null == page){
+        if (null == page) {
             page = 1;
         }
 
         List<UserVO> userVOS = new ArrayList<>();
         // 每页5条记录，跳过条数算法等于下方参数
-        List<Object[]> list = userDao.findAllByDouble((page-1)*5);
+        List<Object[]> list = userDao.findAllByDouble((page - 1) * 5);
         for (int i = 0; i < list.size(); i++) {
             Object[] ob = list.get(i);
             UserVO vo = new UserVO();
@@ -241,8 +241,6 @@ public class UserService {
         System.out.println(userVOS.size());
         return userVOS;
     }
-
-
 
     // 查询全部用户方法
     public List<User> findAll() {

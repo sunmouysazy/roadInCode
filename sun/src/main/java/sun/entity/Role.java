@@ -11,11 +11,11 @@ import javax.persistence.Id;
  */
 public class Role {
     // ID
-    @Id//主键
-    @GeneratedValue(strategy= GenerationType.IDENTITY)//自增
+    @Id// 主键
+    @GeneratedValue(strategy = GenerationType.IDENTITY)// 自增
     private Integer id;
     // 角色名
-    private String name;
+    private String  name;
     // 菜单等级（外键）
     private Integer menuLevel;
 
@@ -53,6 +53,5 @@ public class Role {
     public void setMenuLevel(Integer menuLevel) {
         this.menuLevel = menuLevel;
     }
-
 
 }

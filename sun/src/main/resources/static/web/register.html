@@ -68,12 +68,12 @@
         if (json.state == 200) {
           // 注册成功
           alert('注册成功！' + json.msg);
-          window.location.href="login.html";
-        } else if(json.state == 301){
+          window.location.href = 'login.html';
+        } else if (json.state == 301) {
           alert('注册失败！' + json.msg);
-        }else if(json.state == 302){
+        } else if (json.state == 302) {
           alert('注册失败！' + json.msg);
-        }else if(json.state == 303){
+        } else if (json.state == 303) {
           alert('注册失败！' + json.msg);
         }
       },
