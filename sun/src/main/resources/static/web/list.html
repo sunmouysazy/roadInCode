@@ -52,7 +52,7 @@
 
   // 首次加载
   function userList(page) {
-    var url = '../user/pageFind';
+    var url = '../user/find/page';
     var data = {'page': page};
     console.log('page:' + page + ',data:' + data);
     $.ajax({
@@ -72,13 +72,13 @@
           // 遍历收货地址数据
           console.log('用户列表数据：');
           for (var i = 0; i < list.length; i++) {
-            console.log('id=' + list[i].id + ', username=' + list[i].username + ', password=' + list[i].password + ', role_id=' + list[i].roleId);
+            console.log('id=' + list[i].id + ', username=' + list[i].username + ', password=' + list[i].password + ', role_id=' + list[i].roleName);
             // 定义HTML代码的模版
             var html = '<tr>'
                 + '<td>' + list[i].id + '</td>'
                 + '<td>' + list[i].username + '</td>'
                 + '<td>' + list[i].password + '</td>'
-                + '<td>' + list[i].roleId + '</td>'
+                + '<td>' + list[i].roleName + '</td>'
                 + '<td><a  href="http://localhost:8080/web/userdata.html?id=' + list[i].id + '">修改</a></td>'
                 + '<td><a  href="javascript:deleteById(' + list[i].id + ')">删除</a></td>'
                 + '</tr>';

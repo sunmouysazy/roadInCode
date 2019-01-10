@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import sun.VO.UserVO;
 import sun.entity.ResponseResult;
 import sun.entity.User;
 import sun.service.UserService;
@@ -44,8 +45,11 @@ public class UserController extends BaseController {
         User u = userService.Userlogin(user);
         // 获取登录用户的id
         Integer id = u.getId();
-        // 将id封装到session中
+        // 获取登录用户的role_id
+        Integer roleId = u.getRoleId();
+        // 将id,roleId封装到session中
         session.setAttribute("id", id);
+        session.setAttribute("roleId",roleId);
         System.out.println("封装id：" + id);
         // 创建返回值对象
         return new ResponseResult();
@@ -72,18 +76,30 @@ public class UserController extends BaseController {
         return new ResponseResult();
     }
 
+    // 分页查询所有用户(关联查询)
+    @RequestMapping("find/page")
+    public ResponseResult findDouble(Integer page,HttpSession session){
+        Integer id = getIdfromSession(session);
+        Integer roleId = Integer.valueOf(session.getAttribute("roleId").toString());
+        if(roleId != 2 && roleId!=1){
+            throw new NoAccessInfoException("您没有管理员权限，无法访问！");
+        }
+        ResponseResult result = new ResponseResult();
+        List<UserVO> vo = userService.findAllByDouble(page);
+        result.setData(vo);
+        return result;
+    }
+
     // 分页查看用户的方法
-    @RequestMapping("/pageFind")
+    @RequestMapping("")
     public ResponseResult pageFind(Integer page, HttpSession session) {
         // 通过session验证获取id
         Integer id = getIdfromSession(session);
         if (id != 1) {
             throw new NoAccessInfoException("您没有管理员权限，无法访问！");
         }
-        System.out.println("Controller的page的值" + page);
         // 调用业务层方法
         List<User> list = userService.pageFind(page);
-        System.out.println("从service出来list的值" + page);
         // 创建并返回对象
         ResponseResult result = new ResponseResult();
         result.setData(list);
@@ -129,11 +145,13 @@ public class UserController extends BaseController {
     @RequestMapping("/find")
     public List<User> find() {
         // 调用业务层方法
-        List<User> list = this.userService.findAll();
+        List<User> list = userService.findAll();
         if (list == null) {
             throw new UserNotFindException("用户不存在，请重新查询！");
         }
         return list;
     }
+
+
 
 }

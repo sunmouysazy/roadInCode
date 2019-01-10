@@ -11,7 +11,6 @@ import org.springframework.data.annotation.Id;
  *
  * @author Administrator
  */
-//@Entity
 public class Menu {
     // ID
     @Id//主键

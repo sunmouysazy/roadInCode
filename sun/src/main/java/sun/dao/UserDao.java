@@ -37,8 +37,7 @@ public interface UserDao extends JpaRepository<User, Integer> {
     List<User> findByUsernameLike(@Param("username") String username);
 
     // 修改密码(根据id修改)
-    @Transactional
-    @Modifying
+    @Transactional    @Modifying
     @Query("update User u set u.password=:password where u.id=:id")
     Integer updatePassword(@Param("id") Integer id, @Param("password") String password);
 
@@ -54,4 +53,10 @@ public interface UserDao extends JpaRepository<User, Integer> {
     @Query("update User u set u.username=case when :#{#user.username} is null then u.username else :#{#user.username} end," + "u.password=case when :#{#user.password} is null then u.password else :#{#user.password} end,"
             + "u.roleId=case when :#{#user.roleId} is null then u.roleId else :#{#user.roleId} end " + "where u.id=:#{#user.id}")
     Integer updateUserById(@Param("user") User user);
+
+    // 关联查询
+    @Query(value = "select u.id,u.username,u.password,r.role_name from user u,role r where u.role_id=r.id limit ?1,5",nativeQuery = true)
+    List<Object[]> findAllByDouble(Integer page);
+
+
 }

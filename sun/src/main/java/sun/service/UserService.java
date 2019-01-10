@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import sun.VO.UserVO;
 import sun.dao.UserDao;
 import sun.entity.User;
 import sun.service.Exception.DeleteManagerException;
@@ -218,6 +219,30 @@ public class UserService {
             throw new PasswordFormatException("密码格式不正确，请重新输入6-16位由字母和数字构成的密码！");
         }
     }
+
+    // 查询全部用户方法（关联查询）
+    public List<UserVO> findAllByDouble(Integer page) {
+        if (null == page){
+            page = 1;
+        }
+
+        List<UserVO> userVOS = new ArrayList<>();
+        // 每页5条记录，跳过条数算法等于下方参数
+        List<Object[]> list = userDao.findAllByDouble((page-1)*5);
+        for (int i = 0; i < list.size(); i++) {
+            Object[] ob = list.get(i);
+            UserVO vo = new UserVO();
+            vo.setId((Integer) ob[0]);
+            vo.setUsername((String) ob[1]);
+            vo.setPassword((String) ob[2]);
+            vo.setRoleName((String) ob[3]);
+            userVOS.add(vo);
+        }
+        System.out.println(userVOS.size());
+        return userVOS;
+    }
+
+
 
     // 查询全部用户方法
     public List<User> findAll() {

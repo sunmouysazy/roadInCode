@@ -9,7 +9,6 @@ import javax.persistence.Id;
  *
  * @author Administrator
  */
-//@Entity
 public class Role {
     // ID
     @Id//主键

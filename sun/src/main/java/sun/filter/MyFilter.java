@@ -33,7 +33,6 @@ public class MyFilter implements Filter {
         // 页面路径
         whiteList.add("register.html");
         whiteList.add("login.html");
-        whiteList.add("index.html");
     }
 
     @Override
