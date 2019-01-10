@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset=utf-8/>
+  <meta charset="utf-8"/>
   <title>主页</title>
 
-  <script class="jsbin" src="../js/jquery-1.7.2.min.js"></script>
+  <script class="jsbin" src="../js/jquery-1.7.2.min.js" charset="UTF-8"></script>
   <link rel="stylesheet" type="text/css" href="../css/easyui.css">
   <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
   <script type="text/javascript" src="../js/main.js"></script>
@@ -13,26 +13,22 @@
   <![endif]-->
   <style>
     article, aside, figure, footer, header, hgroup,
-    menu, nav, section {
-      display: block;
+    menu, nav, section { display: block; }
+    .west{
+      width:200px;
+      padding:10px;
     }
-
-    .west {
-      width: 200px;
-      padding: 10px;
-    }
-
-    .north {
-      height: 30px;
+    .north{
+      height:30px;
     }
   </style>
   <script language=Javascript>
     function time() {
       //获得显示时间的div
       t_div = document.getElementById('showtime');
-      var now = new Date();
+      var now = new Date()
       //替换div内容
-      t_div.innerHTML = now.getFullYear() + '年 ' + (now.getMonth() + 1) + '月 ' + now.getDate() + '日 ' + now.getHours() + '时 ' + now.getMinutes() + '分 ';
+      t_div.innerHTML = now.getFullYear() + "年 " + (now.getMonth() + 1) + "月 " + now.getDate() + "日 " + now.getHours() + "时 " + now.getMinutes() + "分 ";
       //等待一秒钟后调用time方法，由于settimeout在time方法内，所以可以无限调用
       setTimeout(time, 1000);
     }
@@ -44,11 +40,10 @@
 
 <div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
 	background:  #7f99be repeat-x center 50%;
-	line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
+	line-height: 20px;color: #fff; font-family:  微软雅黑,黑体">
   <span style="padding-left:10px; font-size: 16px; ">
-<img src="../images/blocks.gif" width="20" height="20" align="absmiddle"/><span id="showtime"></span>
+<img src="../images/blocks.gif" width="20" height="20" align="absmiddle" /><span id="showtime"></span>
 </span>
-
 </div>
 <div region="center" title="">
   <div class="easyui-tabs" fit="true" border="false" id="tabs">
