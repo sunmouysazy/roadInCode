@@ -1,35 +1,39 @@
 package sun.entity;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-
-import org.springframework.data.annotation.Id;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
- * 菜单实体类
+ * 菜单实体
  * ---------------------------------------------------------------------------------------------------------------------
  *
  * @author Administrator
  */
+@Entity
+@Table(name = "menu")
 public class Menu {
-    // ID
-    @Id// 主键
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// 自增
-    private Integer id;
-    // 菜单名
-    private String  name;
-    // 菜单等级
-    private Integer levle;
+    private Integer id;  // id
+    private Integer pid; // 父节点id
+    private String  text; // 节点名
+    private String  attributes;// 跳转地址
 
-    public Menu(Integer id, String name, Integer levle) {
-        this.id = id;
-        this.name = name;
-        this.levle = levle;
+    public Menu() {
+    }
+
+    public Menu(Integer pid, String text, String attributes) {
+        this.pid = pid;
+        this.text = text;
+        this.attributes = attributes;
     }
 
     @Override
     public String toString() {
-        return "Menu{" + "id=" + id + ", name='" + name + '\'' + ", levle=" + levle + '}';
+        return "Menu{" + "id=" + id + ", pid=" + pid + ", text='" + text + '\'' + ", attributes='" + attributes + '\'' + '}';
     }
 
     public Integer getId() {
@@ -40,20 +44,27 @@ public class Menu {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getPid() {
+        return pid;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 
-    public Integer getLevle() {
-        return levle;
+    public String getText() {
+        return text;
     }
 
-    public void setLevle(Integer levle) {
-        this.levle = levle;
+    public void setText(String text) {
+        this.text = text;
     }
 
+    public String getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
+    }
 }

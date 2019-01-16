@@ -71,4 +71,7 @@ public class BaseController {
     protected Integer getIdfromSession(HttpSession session) {
         return Integer.valueOf(session.getAttribute("id").toString());
     }
+
+
+
 }

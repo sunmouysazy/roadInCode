@@ -62,7 +62,7 @@
       'dataType': 'json',
       'success': function(json) {
         if (json.state != 200) {
-          alert(''+json.msg);
+          alert('' + json.msg);
         } else {
           // 清除原有列表
           $('#user-list').empty();

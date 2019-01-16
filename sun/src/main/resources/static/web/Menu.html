@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>主页</title>
+
+  <script class="jsbin" src="../js/jquery-1.7.2.min.js" charset="UTF-8"></script>
+  <link rel="stylesheet" type="text/css" href="../css/easyui.css">
+  <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+  <script type="text/javascript" src="../js/main.js"></script>
+  <script src="../js/html5shiv.js"></script>
+</head>
+<body>
+<h1>菜单管理</h1>
+<br>
+<table id="list-table" border="1px" bordercolor="red" cellspacing="5px" cellpadding="20px">
+  <caption>菜单列表</caption>
+  <thead>
+  <tr>
+    <th>id</th>
+    <th>菜单名</th>
+    <th>父级id</th>
+    <th colspan="3">操作</th>
+  </tr>
+  </thead>
+
+  <tbody id="menu-list">
+  <tr>
+    <td>1</td>
+    <td>测试账号</td>
+    <td>测试密码</td>
+    <td><a href="#">修改</a></td>
+    <td><a href="#">删除</a></td>
+    <td><a href="#">增加</a></td>
+  </tr>
+  </tbody>
+</table>
+<script type="text/javascript">
+  /*页面加载完成后开始执行*/
+  $(document).ready(function() {
+    menuList();
+  });
+
+  // 首次加载
+  function menuList() {
+    var url = '../user/find/all/menu';
+    var data = {};
+    $.ajax({
+      'url': url,
+      'data': data,
+      'type': 'GET',
+      'dataType': 'json',
+      'success': function(json) {
+        if (json.state != 200) {
+        } else {
+          // 清除原有列表
+          $('#menu-list').empty();
+          // 从返回结果中获取数据
+          var list = json.data;
+          console.log('用户列表数据：');
+          for (var i = 0; i < list.length; i++) {
+            console.log('id=' + list[i].id + ', text=' + list[i].text + ', pid=' + list[i].pid);
+            // 定义HTML代码的模版
+            var html = '<tr>'
+                + '<td>' + list[i].id + '</td>'
+                + '<td>' + list[i].text + '</td>'
+                + '<td>' + list[i].pid + '</td>'
+                + '<td><a  href="http://localhost:8080/web/menudata.html?id=' + list[i].id + '">修改</a></td>'
+                + '<td><a  href="javascript:deleteById(' + list[i].id + ')">删除</a></td>'
+                + '<td><a  href="http://localhost:8080/web/addMenu.html?id=' + list[i].id + '">增加</a></td>'
+                + '</tr>';
+
+            // 将HTML代码添加到表格中
+            $('#menu-list').append(html);
+          }
+        }
+      },
+    });
+  }
+
+  function deleteById(id) {
+    var url = '../user/delete/menu';
+    var data = {'id': id};
+    $.ajax({
+      'url': url,
+      'data': data,
+      'type': 'GET',
+      'dataType': 'json',
+      'success': function(json) {
+        if (json.state == 200) {
+          alert('删除成功！');
+          menuList();
+        } else {
+          alert('删除失败！');
+        }
+      },
+      'error': function(xhr) {
+        console.log('响应码：' + xhr.state);
+        alert('您的登录信息已过期，请重新登录！');
+        location.href = 'login.html';
+      },
+    });
+  }
+</script>
+
+</body>
+</html>

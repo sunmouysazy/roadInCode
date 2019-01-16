@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8"/>
+  <title>添加菜单页面</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+</head>
+
+<body>
+
+<form id="form-menu" action="addMenu.html" method="get">
+  菜单名:
+  <input id="text" name="text" type="text"><br>
+  菜单父级id:&nbsp;&nbsp;&nbsp;&nbsp;
+  <input id="pid" name="pid" type="text" readonly><br>
+  <input id="btn-add" type="button" value="提交">
+</form>
+
+
+<script type="text/javascript">
+  /*页面加载完成后开始执行*/
+  $(document).ready(function() {
+    var id = getQueryVariable('id');
+    getMenu(id);
+  });
+
+  // 获取url中对应属性名的值
+  function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      if (pair[0] == variable) {return pair[1];}
+    }
+    return (false);
+  }
+
+  $('#btn-add').click(function() {
+    var url = '../user/add/menu';
+    var data = $('#form-menu').serialize();
+    $.ajax({
+      'url': url,
+      'data': data,
+      'type': 'GET',
+      'dataType': 'json',
+      'success': function(json) {
+        if (json.state == 200) {
+          alert('添加成功！');
+          document.location.reload();
+        } else {
+          alert('添加失败！请联系管理员！');
+        }
+      },
+      'error': function(xhr) {
+        console.log('响应码：' + xhr.state);
+        alert('您的登录信息已过期，请重新登录！');
+        location.href = 'login.html';
+      },
+    });
+  });
+
+  function getMenu(id) {
+    var url = '../user/get/menu';
+    var data = {'id': id};
+    $.ajax({
+      'url': url,
+      'data': data,
+      'type': 'GET',
+      'dataType': 'json',
+      'success': function(json) {
+        var menu = json.data;
+        $('#pid').val(menu.id);
+      },
+      'error': function(xhr) {
+        console.log('响应码：' + xhr.state);
+        alert('您的登录信息已过期，请重新登录！');
+        location.href = 'login.html';
+      },
+    });
+  }
+
+
+</script>
+</body>
+
+</html>

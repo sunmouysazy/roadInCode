@@ -1,6 +1,6 @@
 // 菜单管理表
-// id: 菜单id(主键,自增),menu_name:菜单名,up_id:上级菜单id
-create table menu(id int auto_increment primary key,menu_name varchar(20),up_id);
+// id: 菜单id(主键,自增),text:菜单名,pid:上级菜单id
+create table menu(id int auto_increment primary key,text varchar(30),pid);
 
 // 初始化菜单表
 insert into menu values(null,'系统菜单',null);

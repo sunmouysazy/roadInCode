@@ -42,7 +42,7 @@ public class UserService {
         // 获取密码
         String password = user.getPassword();
         // 设置用户的角色为注册用户
-        user.setRoleId(2);
+        user.setRoleId(3);
         // 校验用户名
         checkUsername(username);
         // 检查用户是否存在
@@ -107,30 +107,6 @@ public class UserService {
         }
     }
 
-    // 分页查询的方法
-    public List<User> pageFind(Integer page) {
-        // 默认跳过页数page为1
-        if (null == page) {
-            page = 1;
-        }
-        // 创建list集合作为读取分页查询数据的容器
-        List<User> list = new ArrayList<User>(5);
-        // 创建pageable对象 设置每页数据5条
-        Pageable pageable = PageRequest.of(page - 1, 5);
-        // 分页查询所有用户数据
-        Page<User> datas = userDao.findAll(pageable);
-        System.out.println("总条数：" + datas.getTotalElements());
-        System.out.println("总页数：" + datas.getTotalPages());
-        // 循环将分页数据装入list集合
-        for (User u : datas) {
-            list.add(u);
-        }
-        if (page > datas.getTotalPages()) {
-            throw new PageIndexOfException("页面超限！");
-        }
-        return list;
-    }
-
     // 删除用户的方法(根据用户id删除)
     public void deleteUserById(Integer id) {
         // 调用持久层方法
@@ -188,6 +164,40 @@ public class UserService {
         return list;
     }
 
+    // 查询全部用户方法（关联查询）
+    public List<UserVO> findAllByDouble(Integer page) {
+        if (null == page) {
+            page = 1;
+        }
+        // 获取数据总数
+        List<User> users = userDao.findAll();
+        Integer totalItem = users.size();
+        // 获取总页数
+        Integer totalPage;
+        if (totalItem % 5 == 0) {
+            totalPage = totalItem % 5;
+        } else {
+            totalPage = totalItem / 5 + 1;
+        }
+        List<UserVO> userVOS = new ArrayList<>();
+        if (page > totalPage || page < 1) {
+            throw new PageIndexOfException("页面超限！！！");
+        }
+        // 每页5条记录，跳过条数算法等于下方参数
+        List<Object[]> list = userDao.findAllByDouble((page - 1) * 5);
+        for (int i = 0; i < list.size(); i++) {
+            Object[] ob = list.get(i);
+            UserVO vo = new UserVO();
+            vo.setId((Integer) ob[0]);
+            vo.setUsername((String) ob[1]);
+            vo.setPassword((String) ob[2]);
+            vo.setRoleName((String) ob[3]);
+            userVOS.add(vo);
+        }
+        System.out.println(list.size());
+        return userVOS;
+    }
+
     // 查询用户信息的方法(根据username模糊查询)
     public List<User> findByUsernameLike(String username) {
         if (null == username || "".equals(username)) {
@@ -220,26 +230,28 @@ public class UserService {
         }
     }
 
-    // 查询全部用户方法（关联查询）
-    public List<UserVO> findAllByDouble(Integer page) {
+    // 分页查询的方法
+    public List<User> pageFind(Integer page) {
+        // 默认跳过页数page为1
         if (null == page) {
             page = 1;
         }
-
-        List<UserVO> userVOS = new ArrayList<>();
-        // 每页5条记录，跳过条数算法等于下方参数
-        List<Object[]> list = userDao.findAllByDouble((page - 1) * 5);
-        for (int i = 0; i < list.size(); i++) {
-            Object[] ob = list.get(i);
-            UserVO vo = new UserVO();
-            vo.setId((Integer) ob[0]);
-            vo.setUsername((String) ob[1]);
-            vo.setPassword((String) ob[2]);
-            vo.setRoleName((String) ob[3]);
-            userVOS.add(vo);
+        // 创建list集合作为读取分页查询数据的容器
+        List<User> list = new ArrayList<User>(5);
+        // 创建pageable对象 设置每页数据5条
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        // 分页查询所有用户数据
+        Page<User> datas = userDao.findAll(pageable);
+        System.out.println("总条数：" + datas.getTotalElements());
+        System.out.println("总页数：" + datas.getTotalPages());
+        // 循环将分页数据装入list集合
+        for (User u : datas) {
+            list.add(u);
         }
-        System.out.println(userVOS.size());
-        return userVOS;
+        if (page > datas.getTotalPages()) {
+            throw new PageIndexOfException("页面超限！");
+        }
+        return list;
     }
 
     // 查询全部用户方法
